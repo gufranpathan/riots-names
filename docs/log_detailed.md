@@ -135,4 +135,4 @@ One entry per piece of work, oldest first. Old entries are not rewritten; correc
 - **Checks:** `tar_make()` completed with one thread; `tar_outdated()` returns no targets. `make_tables.R` ran, including the check of the IV estimates. `check_deck.py`: 12 pages as expected, no overflow, wide lines, missing characters or dead links; pages 10–12 viewed.
 - **Problems:** the crash above; its cause was not found, and the one-thread setting avoids it. With the specification rows (festival coding, controls, fixed effects) the AR table did not fit the slide, so they were dropped and the note refers to the first-stage slide for the columns.
 - **Open:** none new; where slide 7 (festivals and riots by year) belongs is still open (entry 5).
-- **Commit:** not committed.
+- **Commit:** 2ed98e4 (branch `master`).
