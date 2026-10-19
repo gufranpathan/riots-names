@@ -1,0 +1,28 @@
+% Written by slides/make_tables.R from the targets pipeline; do not edit by hand.
+\begin{tabular}{l*{2}{>{\centering\arraybackslash}p{40mm}}}
+\toprule
+& \textbf{Muslim Name Index (t+1)} & \textbf{Hindu Name Index (t+1)} \\
+\cmidrule(lr){2-2} \cmidrule(lr){3-3}
+ & (1) & (2) \\
+\midrule
+\multicolumn{3}{l}{\textbf{Panel A: OLS Estimates}} \\
+Riot exposure & 0.0068\sym{***} & 0.0012\sym{**} \\
+ & (0.0010) & (0.0005) \\
+\addlinespace
+\multicolumn{3}{l}{\textbf{Panel B: Reduced Form Estimates}} \\
+Friday Festival & 0.0015\sym{***} & 0.0014\sym{***} \\
+ & (0.0006) & (0.0002) \\
+\addlinespace
+\multicolumn{3}{l}{\textbf{Panel C: IV Estimates}} \\
+Riot exposure (instrumented) & 0.0233\sym{***} & 0.0215\sym{***} \\
+ & (0.0085) & (0.0033) \\
+\addlinespace
+First-stage F-statistic & 435.48 & 435.48 \\
+\midrule
+Observations & 12,161 & 12,161 \\
+\midrule
+Controls & Yes & Yes \\
+Quadratic Year Trend & Yes & Yes \\
+District FE & Yes & Yes \\
+\bottomrule
+\end{tabular}

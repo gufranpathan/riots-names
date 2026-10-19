@@ -1,0 +1,27 @@
+% Tables for riots_names_results.qmd, laid out like the tables in the paper
+% (docs/main.tex): Computer Modern (Latin Modern) in black, booktabs rules, bold
+% headers and panel labels, italic group labels, and notes set at the table's width.
+% The tabulars in tables/ are written by make_tables.R; the deck wraps each in an
+% econtable environment with its notes. Loaded after beamer_theme.tex, which loads
+% booktabs and colortbl.
+\usepackage{threeparttable}
+% The 7-point design of Latin Modern: the tables are set at 6-7 pt, where the
+% 10-point design looks thin and tight
+\newfontfamily\paperfont{lmroman7}[Extension=.otf, Scale=1.0, Ligatures=TeX,
+  UprightFont=*-regular, BoldFont=*-bold, ItalicFont=*-italic,
+  BoldItalicFont=lmroman10-bolditalic]
+% \begin{econtable}{font size}{line height} ... \end{econtable}, sizes in pt: the
+% table centred at its natural width, with \econnotes{...} under it
+\newenvironment{econtable}[2]{%
+  \par\vspace{0.2em}\centering\paperfont\fontsize{#1}{#2}\selectfont\color{black}%
+  \arrayrulecolor{black}\setlength{\tabcolsep}{0.8em}%
+  \setlength{\aboverulesep}{0.3ex}\setlength{\belowrulesep}{0.5ex}%
+  \renewcommand{\defaultaddspace}{0.5em}%
+  \begin{threeparttable}}{\end{threeparttable}\par}
+\newcommand{\econnotes}[1]{%
+  \begin{tablenotes}[flushleft]\setlength{\labelsep}{0pt}\fontsize{5.9}{7}\selectfont
+  \item[]\textit{Notes:} #1\end{tablenotes}}
+% Significance stars as superscripts that do not move the number they follow
+\newcommand{\sym}[1]{\rlap{$^{#1}$}}
+% Stars in notes: \stars{***}{0.01}
+\newcommand{\stars}[2]{$^{#1}$\,\textit{p}\,<\,#2}

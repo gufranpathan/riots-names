@@ -1,0 +1,106 @@
+---
+title: "Do Riots Drive Identity Underground?"
+subtitle: "Tables and figures with the frozen name index, riot years 1970–1995"
+date: "2026-10-19"
+date-format: "D MMMM YYYY"
+format:
+  beamer:
+    aspectratio: 169
+    fontsize: 10pt
+    classoption: [t]
+    slide-level: 2
+    section-titles: true
+    pdf-engine: lualatex
+    keep-tex: false
+    colorlinks: false
+    include-in-header:
+      - beamer_theme.tex
+      - tables_preamble.tex
+    filters:
+      - at: post-quarto
+        path: beamer.lua
+# Tables: tables/*.tex, written by make_tables.R and laid out like the paper's;
+# figures: figures/*.pdf, drawn by make_figures.R. Both read the targets pipeline;
+# run them from the project root before rendering. Main slides use one specification
+# (riot exposure); the appendix adds own-district riots and the riot count.
+---
+
+## Effect of riot exposure on names {#effects}
+
+```{=latex}
+\begin{econtable}{6.8}{7.8}
+\input{tables/effects.tex}
+\econnotes{Outcome: name index of the cohort born in t+1; higher values mean more distinctive names. Riot exposure is exp(−d²/(2·200²)), where d is the distance in km to the nearest district with a riot that year; Panel C instruments it with the Friday festival (Iyer and Shrivastava 2018). Controls: BJP rule, Muslim share, urbanisation, literacy, electricity and tap water. Standard errors clustered by district in parentheses; the appendix adds standard errors clustered by state-year. With one instrument, the reduced-form test is the Anderson–Rubin test of a zero effect, which stays valid when the instrument is weak. \stars{***}{0.01}, \stars{**}{0.05}, \stars{*}{0.1}.}
+\end{econtable}
+```
+
+## Name index by birth cohort {#index-trends}
+
+::: {.figure-note}
+Mean name index of each birth cohort in districts on the 1981 list. Crimson: districts with at least one riot in 1970–1995; grey: districts with none. Numbers of districts in brackets.
+:::
+
+![](figures/index_trends.pdf){width=100%}
+
+## Distribution of the name index {#index-distribution}
+
+::: {.figure-note}
+Density of the name index of the cohort born in t+1. Top row: district-years with a riot (crimson) and without (grey), districts on the 1981 list. Bottom row: with a Friday festival (crimson) and without (grey), all districts.
+:::
+
+![](figures/index_distribution.pdf){width=100%}
+
+# Appendix {#appendix}
+
+## Summary statistics {#summary-stats}
+
+```{=latex}
+\begin{econtable}{7.4}{8.8}
+\input{tables/summary_stats.tex}
+\econnotes{Name indices are the mean name score of the cohort born in t+1, with names scored on births before 1970; higher values mean more distinctive names, and the Hindu index is one minus the score. Numbers of Muslims and Hindus count voters in polling-booth cells with a scored name. Riot rows cover districts on the 1981 list, the only ones with own-district riot data; missing deaths and injuries count as 0. Riot exposure is exp(−d²/(2·200²)), where d is the distance in km to the nearest district with a riot that year.}
+\end{econtable}
+```
+
+## Riot and non-riot district-years {#riot-comparison}
+
+```{=latex}
+\begin{econtable}{8}{9.6}
+\input{tables/riot_comparison.tex}
+\econnotes{District-years of the districts on the 1981 list, the only ones with own-district riot data. Difference: coefficient on riot in a regression of the row variable on riot, with standard errors clustered by district. \stars{***}{0.01}, \stars{**}{0.05}, \stars{*}{0.1}.}
+\end{econtable}
+```
+
+## Friday festivals and riots by year {#festivals-riots}
+
+::: {.figure-note}
+Left: districts with a Friday festival (Iyer and Shrivastava's coding) in each riot year. Right: districts on the 1981 list with a riot.
+:::
+
+![](figures/festivals_riots.pdf){width=100%}
+
+## First stage by specification {#app-first-stage}
+
+```{=latex}
+\begin{econtable}{7}{8.4}
+\input{tables/app_first_stage.tex}
+\econnotes{Riot: a riot in the district, for districts on the 1981 list (0 elsewhere). Exposure: exp(−d²/(2·200²)), where d is the distance in km to the nearest district with a riot that year. Count: riots in the riot-data districts, weighted the same way. The instrument is 1 if one of the state's three main Hindu festivals, Dushehra or Diwali falls on a Friday, in the coding of Goyal and van Noort (2025) or of Iyer and Shrivastava (2018). Controls: BJP rule, Muslim share, urbanisation, literacy, electricity and tap water. Column 3 is the main specification. Standard errors clustered by district in parentheses and by state-year in brackets; stars use district clusters. \stars{***}{0.01}, \stars{**}{0.05}, \stars{*}{0.1}.}
+\end{econtable}
+```
+
+## Muslim name index by specification {#app-muslim}
+
+```{=latex}
+\begin{econtable}{6.3}{7.4}
+\input{tables/app_effects_muslim.tex}
+\econnotes{Columns as in the first stage by specification; column 3 is the main specification. Standard errors clustered by district in parentheses and by state-year in brackets; stars use district clusters. The reduced-form tests are the Anderson–Rubin tests of a zero effect. \stars{***}{0.01}, \stars{**}{0.05}, \stars{*}{0.1}.}
+\end{econtable}
+```
+
+## Hindu name index by specification {#app-hindu}
+
+```{=latex}
+\begin{econtable}{6.3}{7.4}
+\input{tables/app_effects_hindu.tex}
+\econnotes{Columns as in the first stage by specification; column 3 is the main specification. Standard errors clustered by district in parentheses and by state-year in brackets; stars use district clusters. The reduced-form tests are the Anderson–Rubin tests of a zero effect. \stars{***}{0.01}, \stars{**}{0.05}, \stars{*}{0.1}.}
+\end{econtable}
+```

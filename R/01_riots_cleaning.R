@@ -35,17 +35,22 @@ get_riots_location <- function(riots_annual){
 }
 
 get_riots_goyal_clean <- function(riots_goyal_raw, district_corrections){
-  riots_goyal_clean <- riots_goyal_raw %>% 
+  riots_goyal_clean <- riots_goyal_raw %>%
+    mutate(state_goyal=state) %>% # pre-2000 state; sets the festival list of the instrument
     mutate(state=case_match(state,
                             "orissa"~"odisha",
                             .default = state
-    )) %>% 
-    left_join(district_corrections,by=c("state","district")) %>% 
+    )) %>%
+    left_join(district_corrections,by=c("state","district")) %>%
+    # The mapping file sends kanpur to uttarakhand/nainital. That duplicated nainital, and the
+    # old fix dropped both districts. Kanpur (1981) is TCPD kanpurnagar plus kanpurgrameen.
+    mutate(state_tcpd=if_else(district=="kanpur","uttarpradesh",state_tcpd),
+           district_tcpd=if_else(district=="kanpur","kanpurnagar",district_tcpd)) %>%
     mutate(state=coalesce(state_tcpd,state),
-           district=coalesce(district_tcpd,district)) %>% 
-    filter(district!='nainital') #is duplicated twice for every year
+           district=coalesce(district_tcpd,district))
+  stopifnot(!anyDuplicated(riots_goyal_clean[c("state","district","year")]))
   return(riots_goyal_clean)
-  
+
 }
 
 get_friday_festival <- function(riots_goyal_clean){

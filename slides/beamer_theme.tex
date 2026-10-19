@@ -1,0 +1,166 @@
+% House beamer theme (qmd-beamer skill): Source fonts, slate text, crimson
+% accents, hairline tables. The page is 160 x 90 mm (aspectratio: 169) with
+% 6.4 mm side margins, so the text is 147 mm wide; the body text is 10 pt.
+% beamer.lua styles the deck's classes with sizes in pt. The qmd-revealjs
+% skill gives HTML decks the same look.
+%
+% Fonts: Source Sans 3 (text), Source Serif 4 (titles), Source Code Pro
+% (code). With TinyTeX or TeX Live: tlmgr install sourcesans sourceserif
+% sourcecodepro (the older sourcesanspro and sourceserifpro are gone).
+\usepackage{fontspec}
+\setsansfont{SourceSans3}[Extension=.otf, Scale=1.0,
+  UprightFont=*-Regular, BoldFont=*-Semibold,
+  ItalicFont=*-RegularIt, BoldItalicFont=*-SemiboldIt]
+\setmainfont{SourceSerif4}[Extension=.otf, Scale=1.0,
+  UprightFont=*-Regular, BoldFont=*-Semibold,
+  ItalicFont=*-RegularIt, BoldItalicFont=*-SemiboldIt]
+\setmonofont{SourceCodePro}[Extension=.otf, Scale=0.88,
+  UprightFont=*-Regular, BoldFont=*-Semibold]
+\newfontfamily\plainmono{SourceCodePro}[Extension=.otf, Scale=1.0,
+  UprightFont=*-Regular, BoldFont=*-Semibold]
+\newfontfamily\tablemono{SourceCodePro}[Extension=.otf, Scale=0.94,
+  UprightFont=*-Regular, BoldFont=*-Semibold]
+% Ligatures=TeX: pandoc writes an en dash as --, which these fonts printed as two
+% hyphens without it (\setmainfont and \setsansfont apply it by default)
+\newfontfamily\headingfont{SourceSerif4}[Extension=.otf, Scale=1.0,
+  UprightFont=*-Semibold, BoldFont=*-Bold, Ligatures=TeX]
+\newfontfamily\subheadingfont{SourceSerif4}[Extension=.otf, Scale=1.0,
+  UprightFont=*-Regular, BoldFont=*-Semibold, Ligatures=TeX]
+
+% Colours (the same hex values as qmd-revealjs's theme.scss)
+\definecolor{ink}{HTML}{1F2633}
+\definecolor{muted}{HTML}{5D6675}
+\definecolor{rulegrey}{HTML}{D5D9E0}
+\definecolor{hairline}{HTML}{E6E9EE}
+\definecolor{crimson}{HTML}{A51C30}
+\definecolor{accentblue}{HTML}{2F5D8A}
+% For diagrams drawn in TikZ (references/figures-and-diagrams.md)
+\definecolor{panel}{HTML}{F7F8FA}
+\definecolor{boxline}{HTML}{C9CFD8}
+\definecolor{boxhead}{HTML}{EEF1F5}
+\definecolor{edge}{HTML}{8A93A3}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{colortbl}
+
+\setbeamercolor{normal text}{fg=ink, bg=white}
+\setbeamercolor{structure}{fg=ink}
+\setbeamercolor{alerted text}{fg=crimson}
+\setbeamercolor{itemize item}{fg=muted}
+\setbeamercolor{itemize subitem}{fg=muted}
+\setbeamerfont{normal text}{family=\sffamily}
+\hypersetup{hidelinks}
+
+% Layout: narrow side margins
+\setbeamersize{text margin left=6.4mm, text margin right=6.4mm}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{background canvas}{}
+
+% Frame title: serif, with a short crimson rule beneath. The \strut gives the
+% title's last line the same depth whether or not it has letters that descend
+% (g, p, y), so the rule sits at the same height on every slide.
+\setbeamertemplate{frametitle}{%
+  \vspace*{2.4mm}%
+  {\headingfont\fontsize{15}{18}\selectfont\color{ink}\insertframetitle\strut\par}%
+  \nointerlineskip\vspace{0.2mm}%
+  \noindent{\color{crimson}\rule{11.3mm}{0.35mm}}\par
+  \nointerlineskip%
+}
+
+% Title page, section pages and the appendix divider: a crimson bar to the
+% left of the title, centred vertically. Beamer adds a fill at the bottom of
+% top-aligned frames, so the fill above counts twice. Inside the TikZ node,
+% align=left fixes word spaces at the size of the font current when the node
+% starts; \spaceskip=0pt restores spaces that follow the font. The node is as
+% wide as the text less the indent and the bar, so no line is overfull.
+\newcommand{\barredtitle}[1]{%
+  \vspace*{\stretch{2}}\vspace*{2mm}%
+  \noindent\hspace*{4.8mm}\begin{tikzpicture}
+    \node[anchor=north west, inner sep=0pt, text width=\textwidth-9.8mm, align=left] (t)
+      {\hyphenpenalty=10000 \spaceskip=0pt \xspaceskip=0pt #1};
+    \fill[crimson] ([xshift=-4.8mm, yshift=0.6mm]t.north west)
+      rectangle ([xshift=-4.1mm, yshift=-0.6mm]t.south west);
+  \end{tikzpicture}%
+  \vspace*{\fill}%
+}
+% The subtitle and author lines are printed only when the YAML sets them.
+\makeatletter
+\newcommand{\ifauthorset}[2]{\ifx\beamer@shortauthor\@empty#2\else#1\fi}
+\newcommand{\ifsubtitleset}[2]{\ifx\insertsubtitle\@empty#2\else#1\fi}
+\makeatother
+\setbeamertemplate{title page}{%
+  \barredtitle{%
+    {\headingfont\fontsize{19.5}{23}\selectfont\color{ink}\inserttitle\par}%
+    \ifsubtitleset{\vspace{2.2mm}%
+      {\subheadingfont\fontsize{10.5}{13}\selectfont\color{muted}\insertsubtitle\par}}{}%
+    \vspace{7.6mm}%
+    {\fontsize{7.9}{10.5}\selectfont\color{muted}%
+      \ifauthorset{\insertauthor\par\vspace{1.5mm}}{}\insertdate\par}%
+  }%
+}
+\setbeamertemplate{section page}{%
+  \barredtitle{{\headingfont\fontsize{19.5}{23}\selectfont\color{ink}\insertsectionhead\par}}%
+}
+% A level-1 heading starts a numbered section page (it replaces pandoc's
+% \AtBeginSection, which comes earlier in the preamble).
+\AtBeginSection{\begin{frame}\sectionpage\end{frame}}
+
+% Appendix. beamer.lua turns the heading `# Appendix {#appendix}` into an
+% unnumbered frame that calls \appendixdivider, and marks every later frame
+% noframenumbering. The slide total then counts the main slides only, and the
+% footer shows no number in the appendix.
+\newif\ifinappendix
+\newcommand{\appendixdivider}[1]{%
+  \global\inappendixtrue
+  \barredtitle{{\headingfont\fontsize{19.5}{23}\selectfont\color{ink}#1\par}}}
+
+% Footer: slide number at the right, a thin crimson progress bar at the bottom
+\setbeamertemplate{footline}{%
+  % Right-aligned with the text's right margin (\hspace*: TeX drops a plain
+  % \hspace at the end of a line), 1 mm below the text area
+  \vspace*{1mm}\hfill{\fontsize{4.9}{6}\selectfont\color{muted}\ifinappendix\strut\else\insertframenumber\,/\,\inserttotalframenumber\fi}\hspace*{6.4mm}\par
+  \vspace{1.1mm}%
+  \noindent\begin{tikzpicture}
+    \fill[rulegrey] (0,0) rectangle (\paperwidth,0.32mm);
+    % min(): on LaTeX's first pass the total is 1, and from about the 37th
+    % frame on, frame x width exceeds TeX's largest dimension
+    \fill[crimson] (0,0) rectangle ({min(\insertframenumber/\inserttotalframenumber,1)*\paperwidth},0.32mm);
+  \end{tikzpicture}%
+}
+
+% Lists: muted bullets, small squares at the second level
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{\raisebox{0.22em}{\rule{0.28em}{0.28em}}}
+% Pandoc marks short lists as tight: \tightlist sets \itemsep and \parskip to
+% 0. Most of the space between items on a slide is pandoc's \parskip (6 pt),
+% so \tightlist does nothing here and tight lists keep that space.
+% (beamer.lua restores \parskip inside columns, which are minipages.)
+\AtBeginDocument{\renewcommand{\tightlist}{}}
+\setlength{\leftmargini}{1.4em}
+\setlength{\leftmarginii}{1.3em}
+% Second-level items keep the size of the text around them (beamer's default
+% is \small)
+\setbeamerfont{itemize/enumerate subbody}{size=}
+\setbeamerfont{itemize/enumerate subsubbody}{size=}
+\setbeamertemplate{itemize/enumerate body begin}{\linespread{1.12}\selectfont\setlength{\itemsep}{0.45em}}
+\setbeamertemplate{itemize/enumerate subbody begin}{\setlength{\itemsep}{0.35em}\vspace{0.25em}}
+
+% Pieces used by beamer.lua
+\newcommand{\slidesubhead}[4]{% size (pt), space above, space below, text: a ### heading
+  \par\vspace{#2}{\subheadingfont\fontsize{#1}{#1}\selectfont\color{muted}#4\par}\vspace{#3}}
+\newcommand{\chip}[1]{% a link chip: outlined monospace label
+  \tikz[baseline=(c.base)]\node[draw=rulegrey, line width=0.36pt, rounded corners=1.4pt,
+    inner xsep=4.6pt, inner ysep=2.4pt, text=ink,
+    font=\plainmono\fontsize{6.5}{7.5}\selectfont] (c) {\vphantom{Ap}#1};}
+\newcommand{\backlink}[2]{% target, text: pinned to the bottom left of the frame
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=base west, inner sep=0pt] at ([xshift=6.4mm, yshift=4.3mm]current page.south west)
+      {\backlinktext{#1}{#2}};
+  \end{tikzpicture}}
+\newcommand{\backlinktext}[2]{%
+  \hyperlink{#1}{\tikz[baseline=(b.base)]{%
+    \node[inner sep=0pt, text=muted, font=\fontsize{5.9}{7.5}\selectfont] (b) {#2};
+    \draw[rulegrey, line width=0.36pt] ([yshift=-0.8pt]b.south west) -- ([yshift=-0.8pt]b.south east);}}}
