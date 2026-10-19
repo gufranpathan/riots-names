@@ -40,7 +40,7 @@ One entry per piece of work, oldest first. Old entries are not rewritten; correc
   4. The original first-stage table prints the non-robust F (`fitstat(..., "ivf")`); not changed.
   5. Correct the `kanpur` row in `data/0_raw/01-riots/riots_tcpd_district_mapping.xlsx`; the code override stays until then.
   6. Karnataka has 39 of 224 constituencies in the RNI data; Odisha is excluded by design.
-- **Commit:** not committed.
+- **Commit:** ebc3ec5 (branch `frozen-rni-iyer-first-stage`).
 
 ## 2. Frozen RNI added as the main outcome; Iyer-style analysis rerun and new report (2026-10-19)
 
@@ -68,7 +68,7 @@ One entry per piece of work, oldest first. Old entries are not rewritten; correc
   1. Deduplicate Odisha and fill the frozen-RNI coverage gaps upstream (Karnataka, Madurai, Pudukkottai, Kanniyakumari, Assam, the Kashmir valley, Chhattisgarh).
   2. Decide whether `riotall200` (state-year F 11.2) replaces `riotnear200` (5.4) as the main endogenous variable.
   3. Items 2–6 of entry 1 remain open; item 1 (Maharashtra) is resolved in the frozen RNI.
-- **Commit:** not committed.
+- **Commit:** ebc3ec5 (branch `frozen-rni-iyer-first-stage`).
 
 ## 3. Slide deck of the paper's tables and figures with the frozen RNI (2026-10-19)
 
@@ -83,7 +83,7 @@ One entry per piece of work, oldest first. Old entries are not rewritten; correc
 - **Checks:** `make_tables.R` stops unless its first-stage F-statistics equal those in the pipeline's `first_stage_iyer_grid.csv` (frozen RNI). `check_deck.py`: 9 pages as expected, no overflow, wide lines, missing characters or dead links; every page viewed.
 - **Problems:** the first build had an empty frame made by an HTML comment before the first slide; the comment moved into the YAML. The first build took 464 s (font cache); later builds take 20–30 s.
 - **Open:** the deck's text slides; whether the effects tables should keep the paper's R-squared row.
-- **Commit:** not committed.
+- **Commit:** ebc3ec5 (branch `frozen-rni-iyer-first-stage`).
 
 ## 4. Deck tables in the paper's layout; one main specification; appendix by specification (2026-10-19)
 
@@ -96,7 +96,7 @@ One entry per piece of work, oldest first. Old entries are not rewritten; correc
 - **Checks:** `check_deck.py`: 12 pages as expected, no overflow, wide lines, missing characters or dead links; every page viewed. `make_tables.R` still stops unless its first-stage F-statistics equal the pipeline grid.
 - **Problems:** at first the results table was 43.6 pt too tall and the appendix effect tables 24.9 pt too tall; putting both standard errors on one row and tightening line spacing fixed it. Fixed-width columns made the appendix tables too wide; narrower columns, shorter F labels and natural-width columns in the appendix first stage fixed it.
 - **Open:** the deck's text slides.
-- **Commit:** not committed.
+- **Commit:** ebc3ec5 (branch `frozen-rni-iyer-first-stage`).
 
 ## 5. Deck reordered; one standard error per line; Anderson-Rubin named in the notes (2026-10-19)
 
@@ -110,11 +110,11 @@ One entry per piece of work, oldest first. Old entries are not rewritten; correc
 - **Checks:** `check_deck.py`: 11 pages as expected, no overflow, wide lines, missing characters or dead links; page titles confirmed with `pdftotext`; pages 2, 9 and 10 viewed.
 - **Problems:** the reordered results slide was 10.9 pt too tall with the longer note; dropping the IV R-squared row and merging the identical specification rows made room for the separate bracket rows. The appendix effect tables needed 6.3 pt type (from 6.4 pt).
 - **Open:** where slide 7 (festivals and riots by year) belongs; whether to report district clustering only, which would remove the brackets and the state-year F row.
-- **Commit:** not committed.
+- **Commit:** ebc3ec5 (branch `frozen-rni-iyer-first-stage`).
 
 ## 6. Main results slide clustered by district only (2026-10-19)
 
 - **Request:** Remove the state-year results (bracketed standard errors and "First-stage F, state-year clusters") from the main slide; keep them in the appendix. The user had read "state-year clusters" as state fixed effects; the model has district fixed effects only, and state-year is a second way to cluster the standard errors.
 - **Changes:** `slides/make_tables.R`: `estimate_panels()` takes `state_year = FALSE` for the main table, which now shows only district-clustered standard errors and one "First-stage F-statistic" row; the three specification rows (Controls, Quadratic Year Trend, District FE) are separate again now that there is room. Appendix tables unchanged. `slides/riots_names_results.qmd`: the results note drops the brackets and says the appendix adds state-year clusters.
 - **Checks:** `check_deck.py`: 11 pages as expected, no overflow, wide lines, missing characters or dead links; page 2 viewed; the appendix tables still hold the bracketed rows and the state-year F rows.
-- **Commit:** not committed.
+- **Commit:** ebc3ec5 (branch `frozen-rni-iyer-first-stage`).
