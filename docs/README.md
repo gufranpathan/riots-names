@@ -13,7 +13,7 @@ There are two versions of the RNI. The frozen RNI (`data/0_raw/segregation data 
 - `R/03_*.R`, `R/04_*.R`: descriptive tables and plots for the original specification. `R/99_*.R` are scratch scripts outside the pipeline.
 - `data/0_raw/`: raw inputs, not in git; a copy of the CEGA Dropbox folder `Riot Names Data/data/0_raw`. Riots: `01-riots/` (Goyal and van Noort and Iyer and Shrivastava replication files, Varshney–Wilkinson data). RNI: `segregation data 2026/` (frozen, one booth-level CSV) and `rni_annual/ac_year/` (one file per state). Constituency-to-district mapping: `12-delim4/`. Constituency map: `13-ac-shapefile/` (DataMeet, CC BY 2.5 IN).
 - `data/02_output/`: tables (LaTeX rows and CSV files) and plots written by the pipeline. Frozen-RNI results are in `data/02_output/frozen_rni/`; `rni_annual` results of the Iyer-style specification are in `06_first_stage_iyer/` and `07_table_iyer_*/`; outputs that do not use the RNI are in `06_first_stage_iyer/` (`iyer_benchmark.csv`, `goyal_panel_first_stage.csv`) and `08_kernel_validation/`.
-- `slides/`: Quarto beamer deck of the paper's tables and figures with the frozen RNI (`riots_names_results.qmd`, house theme from the qmd-beamer skill). The main slides are the results table for one specification, riot exposure (`riotnear200`), and two figures of the name index; the appendix holds the summary statistics, the riot comparison, the festival and riot figure, and tables that compare four specifications. `make_tables.R` writes `tables/*.tex` (laid out like the paper's tables, macros in `tables_preamble.tex`) and `make_figures.R` writes `figures/*.pdf`, both from the targets store.
+- `slides/`: Quarto beamer deck of the paper's tables and figures with the frozen RNI (`riots_names_results.qmd`, house theme from the qmd-beamer skill). The main slides are the results table for one specification, riot exposure (`riotnear200`), and two figures of the name index; the appendix holds the summary statistics, the riot comparison, the festival and riot figure, tables that compare four specifications, and Anderson–Rubin tests for the same four specifications. `make_tables.R` writes `tables/*.tex` (laid out like the paper's tables, macros in `tables_preamble.tex`) from the targets store and the CSV files in `data/02_output/frozen_rni/06_first_stage_iyer/`; `make_figures.R` writes `figures/*.pdf` from the targets store.
 - `docs/`: this file, the log and reports. `main.tex` and `Riots_and_Names.pdf` are the previous version of the paper.
 
 ## How to run
@@ -29,7 +29,7 @@ To rebuild the slide deck after the pipeline, from the project root:
     Rscript --no-save --no-restore slides/make_figures.R
     quarto render slides/riots_names_results.qmd
 
-Never use `Rscript --vanilla`: it skips `.Rprofile`, so renv does not activate. Install packages with `renv::install()` and then run `renv::snapshot()`. The frozen-RNI file is 2.1 GB; `get_rni_frozen_annual_raw()` aggregates it with `arrow` without loading it into memory.
+Never use `Rscript --vanilla`: it skips `.Rprofile`, so renv does not activate. Install packages with `renv::install()` and then run `renv::snapshot()`. The frozen-RNI file is 2.1 GB; `get_rni_frozen_annual_raw()` aggregates it with `arrow` without loading it into memory. `_targets.R` runs fixest on one thread (`fixest::setFixest_nthreads(1)`): with the default of several threads, `tar_make()` crashed on Windows while building `anderson_rubin_iyer_path_frozen`.
 
 ## Data rules
 

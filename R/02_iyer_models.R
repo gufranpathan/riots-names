@@ -235,7 +235,7 @@ get_anderson_rubin_iyer <- function(rni_riots_iyer, output_root = "data/02_outpu
   ar_list <- list()
   for(window in list(c(1970,1995),c(1977,1995))){
     data <- rni_riots_iyer %>% filter(year>=window[1],year<=window[2])
-    for(spec_row in split(iyer_specs %>% filter(spec%in%c("2","4","5")),~spec)){
+    for(spec_row in split(iyer_specs %>% filter(spec%in%c("1","2","4","5")),~spec)){
       exog_vars <- if(spec_row$exog=="") character(0) else str_split_1(spec_row$exog," \\+ ")
       for(outcome in c("rni_Muslim_lead","rni_Hindu_lead")){
         # stack reduced form (eq y) and first stage (eq x) to get their joint clustered covariance

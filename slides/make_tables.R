@@ -268,6 +268,55 @@ stopifnot(identical(controls(appendix_specs), trend(appendix_specs)))
 write_tabular(app_effects("rni_Muslim_lead", "Muslim Name Index"), "app_effects_muslim", wide_columns(4, "22mm"))
 write_tabular(app_effects("rni_Hindu_lead", "Hindu Name Index"), "app_effects_hindu", wide_columns(4, "22mm"))
 
+# ---- Appendix: Anderson-Rubin tests of a zero IV effect, by specification ----
+# From the pipeline (get_anderson_rubin_iyer): the AR p-value of a zero effect and the
+# AR 95% set, with standard errors clustered by district and by state-year
+anderson_rubin <- read.csv("data/02_output/frozen_rni/06_first_stage_iyer/anderson_rubin_iyer.csv") %>%
+  filter(window == "1970-1995")
+ar_value <- function(outcome, cluster, field) {
+  sapply(appendix_specs$spec, function(s) {
+    row <- anderson_rubin %>% filter(outcome == !!outcome, cluster == !!cluster, spec == as.integer(s))
+    stopifnot(nrow(row) == 1)
+    row[[field]]
+  })
+}
+ar_p_cells <- function(outcome, cluster) {
+  p <- ar_value(outcome, cluster, "ar_p_beta0")
+  ifelse(p < 0.0005, "<0.001", num(p, 3))
+}
+ar_set_cells <- function(outcome, cluster) {
+  type <- ar_value(outcome, cluster, "ar_set")
+  lower <- num(ar_value(outcome, cluster, "ar_lower"), 4)
+  upper <- num(ar_value(outcome, cluster, "ar_upper"), 4)
+  case_when(type == "interval" ~ paste0("[", lower, ", ", upper, "]"),
+            type == "whole real line" ~ "$(-\\infty,\\infty)$",
+            TRUE ~ paste0("$(-\\infty$, ", lower, "$]\\cup[$", upper, "$,\\infty)$"))
+}
+ar_panel <- function(outcome, label) {
+  # the AR file's 2SLS estimates are the effect tables' Panel C estimates
+  iv <- sapply(seq_len(nrow(appendix_specs)), function(i) effects(outcome, appendix_specs[i, ])$iv[["coef"]])
+  stopifnot(isTRUE(all.equal(unname(ar_value(outcome, "district", "tsls")), iv)))
+  c(span_row(label, 5),
+    tex_row("IV estimate", num(iv, 4)),
+    tex_row("AR p-value, district clusters", ar_p_cells(outcome, "district")),
+    tex_row("AR p-value, state-year clusters", ar_p_cells(outcome, "state_year")),
+    tex_row("AR 95\\% set, district clusters", ar_set_cells(outcome, "district")),
+    tex_row("AR 95\\% set, state-year clusters", ar_set_cells(outcome, "state_year")))
+}
+app_anderson_rubin <- c(
+  "\\toprule",
+  "& \\multicolumn{4}{c}{\\textbf{Anderson--Rubin Tests of a Zero IV Effect}} \\\\",
+  "\\cmidrule(lr){2-5}",
+  tex_row("", "(1)", "(2)", "(3)", "(4)"),
+  measure_row,
+  "\\midrule",
+  ar_panel("rni_Muslim_lead", "Panel A: Muslim Name Index (t+1)"),
+  "\\addlinespace",
+  ar_panel("rni_Hindu_lead", "Panel B: Hindu Name Index (t+1)"),
+  "\\bottomrule"
+)
+write_tabular(app_anderson_rubin, "app_anderson_rubin", "l*{4}{c}")
+
 # tables from earlier layouts of the deck
 unlink(file.path(out_dir, c("effects_muslim.tex", "effects_hindu.tex", "first_stage.tex")))
 cat(list.files(out_dir, full.names = TRUE), sep = "\n")

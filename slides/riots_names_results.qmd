@@ -92,7 +92,7 @@ Left: districts with a Friday festival (Iyer and Shrivastava's coding) in each r
 ```{=latex}
 \begin{econtable}{6.3}{7.4}
 \input{tables/app_effects_muslim.tex}
-\econnotes{Columns as in the first stage by specification; column 3 is the main specification. Standard errors clustered by district in parentheses and by state-year in brackets; stars use district clusters. The reduced-form tests are the Anderson–Rubin tests of a zero effect. \stars{***}{0.01}, \stars{**}{0.05}, \stars{*}{0.1}.}
+\econnotes{Columns as in the first stage by specification; column 3 is the main specification. Standard errors clustered by district in parentheses and by state-year in brackets; stars use district clusters. The reduced-form tests are the Anderson–Rubin tests of a zero effect; the last table reports their p-values and 95\% sets. \stars{***}{0.01}, \stars{**}{0.05}, \stars{*}{0.1}.}
 \end{econtable}
 ```
 
@@ -101,6 +101,15 @@ Left: districts with a Friday festival (Iyer and Shrivastava's coding) in each r
 ```{=latex}
 \begin{econtable}{6.3}{7.4}
 \input{tables/app_effects_hindu.tex}
-\econnotes{Columns as in the first stage by specification; column 3 is the main specification. Standard errors clustered by district in parentheses and by state-year in brackets; stars use district clusters. The reduced-form tests are the Anderson–Rubin tests of a zero effect. \stars{***}{0.01}, \stars{**}{0.05}, \stars{*}{0.1}.}
+\econnotes{Columns as in the first stage by specification; column 3 is the main specification. Standard errors clustered by district in parentheses and by state-year in brackets; stars use district clusters. The reduced-form tests are the Anderson–Rubin tests of a zero effect; the last table reports their p-values and 95\% sets. \stars{***}{0.01}, \stars{**}{0.05}, \stars{*}{0.1}.}
+\end{econtable}
+```
+
+## Anderson–Rubin tests by specification {#app-anderson-rubin}
+
+```{=latex}
+\begin{econtable}{6.6}{7.8}
+\input{tables/app_anderson_rubin.tex}
+\econnotes{The Anderson–Rubin (AR) test of a zero IV effect is the reduced-form t-test on the Friday festival; the AR 95\% set collects the IV effects that the test does not reject. Both stay valid when the instrument is weak, unlike the 2SLS standard errors. Columns as in the first stage by specification; column 3 is the main specification.}
 \end{econtable}
 ```

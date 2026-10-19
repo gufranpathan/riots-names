@@ -118,3 +118,21 @@ One entry per piece of work, oldest first. Old entries are not rewritten; correc
 - **Changes:** `slides/make_tables.R`: `estimate_panels()` takes `state_year = FALSE` for the main table, which now shows only district-clustered standard errors and one "First-stage F-statistic" row; the three specification rows (Controls, Quadratic Year Trend, District FE) are separate again now that there is room. Appendix tables unchanged. `slides/riots_names_results.qmd`: the results note drops the brackets and says the appendix adds state-year clusters.
 - **Checks:** `check_deck.py`: 11 pages as expected, no overflow, wide lines, missing characters or dead links; page 2 viewed; the appendix tables still hold the bracketed rows and the state-year F rows.
 - **Commit:** ebc3ec5 (branch `frozen-rni-iyer-first-stage`).
+
+## 7. Anderson–Rubin tests by specification in the deck's appendix (2026-10-19)
+
+- **Request:** Add the Anderson–Rubin (AR) results to the appendix slides only. The user had asked where the AR values were shown (the appendix notes named the test, but no slide reported its p-values or sets) and whether the test concerns the IV estimate. It does: the AR test checks a value of the IV effect, and with one instrument the test of a zero effect is the reduced-form t-test.
+- **Changes:**
+  - `R/02_iyer_models.R`: `get_anderson_rubin_iyer()` covers specification 1 (Goyal's festival coding, own riot, no controls or trend) as well as 2, 4 and 5, so the AR results cover the four appendix columns. `anderson_rubin_iyer.csv` gains the specification 1 rows in `data/02_output/frozen_rni/06_first_stage_iyer/` and in `data/02_output/06_first_stage_iyer/`. The main-specification numbers equal those in entry 2.
+  - `_targets.R`: `fixest::setFixest_nthreads(1)` after the libraries. With fixest's default thread count, `tar_make()` crashed while building `anderson_rubin_iyer_path_frozen` ("callr subprocess failed: could not start R, exited with non-zero status, has crashed or was killed"). Run in the same process (`callr_function = NULL`), R exited with code 127. The same function call ran without error outside targets. With one thread the pipeline completed. The setting applies to every target.
+  - `slides/make_tables.R`: writes `slides/tables/app_anderson_rubin.tex` from `anderson_rubin_iyer.csv` (riot years 1970–1995). For each outcome it gives the IV estimate, the AR p-value of a zero effect and the AR 95% set, each with district and with state-year clusters. It stops unless the file's IV estimates equal those in the appendix effect tables.
+  - `slides/riots_names_results.qmd`: new last slide "Anderson–Rubin tests by specification" (`#app-anderson-rubin`). The notes of the two appendix effect tables end "the last table reports their p-values and 95% sets". The main slides are unchanged.
+- **Results:** `slides/riots_names_results.pdf`, 12 pages. In the main specification (column 3, riot exposure):
+  - Muslim name index: IV 0.0233; AR p = 0.007 with district clusters and 0.444 with state-year clusters; AR 95% sets [0.0066, 0.0402] and [−0.0585, 0.1827].
+  - Hindu name index: IV 0.0215; AR p < 0.001 and 0.197; sets [0.0151, 0.0282] and [−0.0133, 0.1595].
+  - With state-year clusters no column rejects a zero effect at the 5% level (p from 0.197 to 0.720), and every set contains zero. With district clusters every column rejects it except column 1 for the Muslim index (p = 0.194).
+  - Columns 2–4 have the same instrument, controls and sample, so they share the reduced form and the AR p-value; their sets differ because the riot measures have different scales.
+- **Checks:** `tar_make()` completed with one thread; `tar_outdated()` returns no targets. `make_tables.R` ran, including the check of the IV estimates. `check_deck.py`: 12 pages as expected, no overflow, wide lines, missing characters or dead links; pages 10–12 viewed.
+- **Problems:** the crash above; its cause was not found, and the one-thread setting avoids it. With the specification rows (festival coding, controls, fixed effects) the AR table did not fit the slide, so they were dropped and the note refers to the first-stage slide for the columns.
+- **Open:** none new; where slide 7 (festivals and riots by year) belongs is still open (entry 5).
+- **Commit:** not committed.

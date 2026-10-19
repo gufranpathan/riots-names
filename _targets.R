@@ -11,6 +11,11 @@ library(scales)
 library(patchwork)
 library(sf)
 
+# One thread for fixest: with the default 8 threads the R process running
+# get_anderson_rubin_iyer() crashed inside tar_make() on Windows (2026-10-19), while
+# the same call outside targets ran fine. The regressions are small.
+fixest::setFixest_nthreads(1)
+
 source("R/00_utils.R")
 
 source("R/01_riots_cleaning.R")
